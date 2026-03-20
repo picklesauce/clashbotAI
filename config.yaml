@@ -1,0 +1,120 @@
+thresholds:
+  upgrade_min_resource: 10000000
+  match_min_gold: 1000000
+  match_min_elixir: 1000000
+  require_both_for_wall_upgrade: false
+
+vision:
+  # Template-matching mode (no YOLO).
+  use_ocr: true
+
+search:
+  max_skips_before_attack: 6
+
+ocr_stability:
+  median_window: 3
+  fields:
+    home_gold:
+      min_value: 0
+      max_value: 20000000
+      min_digits: 6
+      max_digits: 8
+      max_abs_delta: 1200000
+      max_ratio: 1.25
+    home_elixir:
+      min_value: 0
+      max_value: 20000000
+      min_digits: 6
+      max_digits: 8
+      max_abs_delta: 1200000
+      max_ratio: 1.25
+    enemy_gold:
+      min_value: 0
+      max_value: 7000000
+      min_digits: 4
+      max_digits: 7
+      max_abs_delta: null
+      max_ratio: null
+    enemy_elixir:
+      min_value: 0
+      max_value: 7000000
+      min_digits: 4
+      max_digits: 7
+      max_abs_delta: null
+      max_ratio: null
+
+templates:
+  threshold: 0.83
+  scales: [0.5, 0.6, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0]
+  thresholds:
+    attack_button: 0.70
+    find_match_button: 0.58
+    army_attack_button: 0.68
+    next_match_button: 0.62
+    return_home_button: 0.70
+    wall_sample: 0.78
+    wall_upgrade_button: 0.75
+    wall_upgrade_button_alt: 0.75
+  regions:
+    attack_button: [0, 0, 1920, 1080]
+    find_match_button: [0, 0, 1920, 1080]
+    army_attack_button: [0, 0, 1920, 1080]
+    next_match_button: [0, 0, 1920, 1080]
+    return_home_button: [0, 0, 1920, 1080]
+    wall_sample: [0, 0, 1920, 1080]
+  paths:
+    wall_sample: templates/wall.png
+    wall_upgrade_button: templates/wall_upgrade_gold.png
+    wall_upgrade_button_alt: templates/wall_upgrade_elixir.png
+    attack_button: templates/attack_home.png
+    find_match_button: templates/attack_green.png
+    army_attack_button: templates/army_attack_button.png
+    next_match_button: templates/next_match_button.png
+    return_home_button: templates/return_home.png
+    dragon_slot: templates/electro_dragon.png
+    dragon_duke: templates/dragon_duke.png
+    queen: templates/archer_queen.png
+    archer_queen: templates/archer_queen.png
+    grand_warden: templates/grand_warden.png
+    minion_prince: templates/minion_prince.png
+    # Optional signal templates:
+    # enemy_loot_ready: templates/enemy_loot_ready.png
+    # home_resource_high: templates/home_resource_high.png
+    # balloon_slot: templates/balloon_slot.png
+    # king: templates/king.png
+    # royal_champion: templates/royal_champion.png
+
+# 1920x1080 starter values; calibrate with calibrate_config.py.
+
+coordinates:
+  attack_button: [180, 960]
+  find_match_button: [1560, 975]
+  next_match_button: [1710, 120]
+  return_home_button: [960, 960]
+  wall_upgrade_button: [1290, 915]
+  wall_sample: [1050, 525]
+  deploy_points:
+    dragons:
+      - [330, 270]
+      - [630, 240]
+      - [930, 225]
+      - [1230, 240]
+      - [1530, 270]
+    balloons:
+      - [390, 330]
+      - [690, 315]
+      - [990, 300]
+      - [1290, 315]
+      - [1590, 330]
+    heroes:
+      - [450, 390]
+      - [750, 375]
+      - [1050, 375]
+      - [1350, 390]
+
+regions:
+  # 1920x1080 regions.
+  home_gold: [1597, 19, 309, 71]
+  home_elixir: [1597, 110, 309, 71]
+  enemy_gold: [79, 135, 328, 79]
+  enemy_elixir: [79, 206, 328, 79]

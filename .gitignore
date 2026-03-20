@@ -1,0 +1,33 @@
+## OS / editor
+.DS_Store
+.idea/
+.vscode/
+
+## Python cache / bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+## Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+## Tooling / test caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+## Build / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+## Runtime / local outputs
+*.log
+debug/
