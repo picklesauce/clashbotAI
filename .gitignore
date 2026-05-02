@@ -2,6 +2,7 @@
 .DS_Store
 .idea/
 .vscode/
+.cursor/
 
 ## Python cache / bytecode
 __pycache__/
