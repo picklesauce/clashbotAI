@@ -53,7 +53,7 @@ brew install android-platform-tools
 From project root:
 
 ```bash
-cd /Users/hansonliu/clashbotAI
+cd /Users/{username}/clashbotAI
 adb connect localhost:5555
 adb devices
 ```
@@ -121,7 +121,7 @@ exec zsh
 Kill any lingering bot process:
 
 ```bash
-pkill -f "/Users/hansonliu/clashbotAI/main.py"
+pkill -f "/Users/{username}/clashbotAI/main.py"
 adb disconnect
 adb connect localhost:5555
 ```
