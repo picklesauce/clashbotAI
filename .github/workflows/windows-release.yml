@@ -1,0 +1,55 @@
+# Build a Windows one-folder app (clashbotai.exe) with PyInstaller.
+# - Push tag v*  → attach zip to that GitHub Release (create release from the tag in the UI, or use "Release" with the tag).
+# - workflow_dispatch → build only; download the artifact from the run summary.
+name: Windows executable
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt pyinstaller
+
+      - name: PyInstaller
+        run: pyinstaller --noconfirm clashbotai.spec
+
+      - name: Zip distribution
+        shell: pwsh
+        run: |
+          $zip = "ClashBotAI-windows-amd64.zip"
+          if (Test-Path $zip) { Remove-Item $zip }
+          Compress-Archive -Path "dist/clashbotai" -DestinationPath $zip
+
+      - name: Upload workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ClashBotAI-windows-${{ github.ref_name }}
+          path: ClashBotAI-windows-amd64.zip
+
+      - name: Publish release asset
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ClashBotAI-windows-amd64.zip
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
