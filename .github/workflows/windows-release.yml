@@ -1,12 +1,15 @@
 # Build Windows outputs with PyInstaller:
 # - ClashBotAI-windows-amd64.zip — one-folder (exe + sidecar files; faster startup).
 # - ClashBotAI-windows-amd64-onefile.zip — single clashbotai.exe (slower first launch).
-# - Push tag v*  → attach both zips to that GitHub Release.
-# - workflow_dispatch → both zips as workflow artifacts.
+# - Push to main → build; artifacts only (no release upload).
+# - Push tag v*  → build + attach both zips to that GitHub Release.
+# - workflow_dispatch → same as push to main (artifacts only).
 name: Windows executable
 
 on:
   push:
+    branches:
+      - main
     tags:
       - "v*"
   workflow_dispatch:
