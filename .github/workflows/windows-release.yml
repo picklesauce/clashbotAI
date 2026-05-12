@@ -1,6 +1,8 @@
-# Build a Windows one-folder app (clashbotai.exe) with PyInstaller.
-# - Push tag v*  → attach zip to that GitHub Release (create release from the tag in the UI, or use "Release" with the tag).
-# - workflow_dispatch → build only; download the artifact from the run summary.
+# Build Windows outputs with PyInstaller:
+# - ClashBotAI-windows-amd64.zip — one-folder (exe + sidecar files; faster startup).
+# - ClashBotAI-windows-amd64-onefile.zip — single clashbotai.exe (slower first launch).
+# - Push tag v*  → attach both zips to that GitHub Release.
+# - workflow_dispatch → both zips as workflow artifacts.
 name: Windows executable
 
 on:
@@ -29,27 +31,41 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install -r requirements.txt pyinstaller
 
-      - name: PyInstaller
+      - name: PyInstaller (one-folder)
         run: pyinstaller --noconfirm clashbotai.spec
 
-      - name: Zip distribution
+      - name: Zip one-folder distribution
         shell: pwsh
         run: |
           $zip = "ClashBotAI-windows-amd64.zip"
           if (Test-Path $zip) { Remove-Item $zip }
           Compress-Archive -Path "dist/clashbotai" -DestinationPath $zip
 
-      - name: Upload workflow artifact
+      - name: PyInstaller (one-file)
+        run: pyinstaller --noconfirm clashbotai-onefile.spec
+
+      - name: Zip standalone exe
+        shell: pwsh
+        run: |
+          $zip = "ClashBotAI-windows-amd64-onefile.zip"
+          if (Test-Path $zip) { Remove-Item $zip }
+          Compress-Archive -Path "dist/clashbotai.exe" -DestinationPath $zip
+
+      - name: Upload workflow artifacts
         uses: actions/upload-artifact@v4
         with:
           name: ClashBotAI-windows-${{ github.ref_name }}
-          path: ClashBotAI-windows-amd64.zip
+          path: |
+            ClashBotAI-windows-amd64.zip
+            ClashBotAI-windows-amd64-onefile.zip
 
-      - name: Publish release asset
+      - name: Publish release assets
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
-          files: ClashBotAI-windows-amd64.zip
+          files: |
+            ClashBotAI-windows-amd64.zip
+            ClashBotAI-windows-amd64-onefile.zip
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
